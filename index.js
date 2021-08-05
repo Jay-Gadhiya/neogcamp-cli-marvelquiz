@@ -1,120 +1,144 @@
+// import
+let readlineSync = require('readline-sync');
+let chalk = require('chalk');
 
-var readlineSync = require('readline-sync');
-
-//Questions
-var questions = [{
-  Question :  `What year was the first Iron Man movie released, kicking off the Marvel Cinematic Universe?  
-  a. 2005 
-  b. 2008
-  c. 2010 
-  d.2012
-  Answer :  `,
-  Answer : "b"
-}, 
-
-{
-  Question :  `What is the name of Thor’s hammer?  
-  a. Vanir
-  b. Mjolnir
-  c. Aesir 
-  d.Norn
-  Answer :  `,
-  Answer : "b"
-},
-
-{
-  Question : ` What is Captain America’s shield made of?  
-  a. Adamantium 
-  b. Promethium 
-  c. Vibranium
-  d.Carbonadium
-  Answer :  `,
-  Answer : "c"
-},
-
-{
-  Question :  `What is the name of the little boy Tony befriends while stranded in the Iron Man 3?  
-  a. Harry
-  b. Henry
-  c. Holden 
-  d.Harley
-  Answer :  `,
-  Answer : "d"
-},
-
+// high score logic
+const highScorers = [
+  {
+    name: "king",
+    score: 8
+  },
+  {
+    name: "princess",
+    score: 8
+  }
 ]
 
-
-// play function
-function play(question, answer) {
-  var userAnswer = readlineSync.question(question);
-
-  if(userAnswer.toUpperCase() === answer.toUpperCase()) {
-    console.log("Right!");
-    score += 1;
-  }
-
-  else {
-    console.log("Wrong!");
-    score -= 1;
-  }
-
-  console.log(`Current score : ${score}`);
-}
-
-
-//High score function
-const highScore = [
-{
-  name : "raju",
-  score : 9
-},
-
-{
-  name : "baburav",
-  score : 8
-}
+const levelOneQuestions = [
+  {
+    question: "What year was the first Iron Man movie released, kicking off the Marvel Cinematic Universe?",
+    answer: "2008",
+    options: ["2005", "2008", "2010", "2012"]
+  },
+  {
+    question: "What is the name of Thor’s hammer?",
+    answer: "Mjolnir",
+    options: ["Mjolnir", "vanir", "aesir", "norn"]
+  },
+  {
+    question: "What is Captain America’s shield made of?",
+    answer: "vibranium",
+    options: ["adamantium", "promethium", "vibranium", "carbonadium"]
+  },
+  {
+    question: "What is the name of the little boy Tony befriends while stranded in the Iron Man 3?",
+    answer: "henry",
+    options: ["Harry", "Henry", "Holden", "Harley"]
+  },
+  {
+    question: " Before becoming Vision, what is the name of Iron Man’s A.I. butler?",
+    answer: "J.A.R.V.I.S",
+    options: ["H.O.M.E.R", "J.A.R.V.I.S", "A.L.F.R.E.D", "M.A.R.V.I.N"]
+  },
+  {
+    question: "What is the real name of the Black Panther?",
+    answer: "TChalla",
+    options: ["TChalla", "Mbaku", "NJadaka", "Njobu"]
+  },
 ]
 
-function checkHighScore(score, name) {
-  for(var i = 0; i < highScore.length; i++){
-    if(highScore[i].score < score){
-      console.log('congratulations you are on high score board');
-      highScore.push({name:name, score : score});
+// Level2
+const levelSecondQuestions = [
+  {
+    question: "What is the alien race Loki sends to invade Earth in The Avengers?",
+    answer: "The Chitauri",
+    options: ["The Chitauri", "The Skrullls", 'The Kree', 'The Flerkens']
+  },
+  {
+    question: "Who was the last holder of the Space Stone before Thanos claims it for his Infinity Gauntlet?",
+    answer: "Loki",
+    options: ["Thor", "Loki", "The Collector","Tony stark"]
+  },
+ 
+]
+
+// Level3
+const levelThreeQuestions = [
+  {
+    question: " What fake name does Natasha use when she first meets Tony?",
+    answer: "Natalie",
+    options: ["Natalie", "Natalia", "Nicole","Naya"]
+  },
+  {
+    question: "About which city do Hawkeye and Black Widow often reminisce?",
+    answer: "Budapest",
+    options: ["Budapest", "Prague", "Istanbul","Sokovia"]
+  }
+]
+
+// add score
+let score = 0;
+
+// Check for high Score
+function CheckhighScore(name, score) {
+  // console.log("High Score in Calling....");
+  for (let i = 0; i < highScorers.length; i++) {
+    if (score > highScorers[i].score) {
+      // console.log("Pushed to high score");
+      highScorers.push({ name: name, score: score });
       break;
     }
   }
 }
 
-//main
-var userName = readlineSync.question("May i have your name? ");
-
-var score = 0;
-console.log(`Welcome ${userName} DO YOU KNOW Marvel? `);
-console.log( " ");
-console.log( " ");
-
-
-// call function
-for(var i = 0; i< questions.length; i++) {
-  var curruntQuestion = questions[i];
-
-  play(curruntQuestion.Question, curruntQuestion.Answer);
-  console.log( " ");
-  
+// this function ask questions, check answers and update score.
+function askQuestion(question, answer, options) {
+  if (options) {
+    let ask = readlineSync.keyInSelect(options, chalk.blue.underline.bold(question));
+    checkAnswer(options[ask], answer);
+  } else {
+    let ask = readlineSync.keyInYN(question);
+    checkAnswer(ask, answer);
+  }
 }
 
-console.log(`Your Final Score Is ${score}`);
-console.log( " ");
-console.log( " ");
+function checkAnswer(answer, actualAnswer) {
+  if (answer === actualAnswer) {
+    score = score + 1;
+    console.log(chalk.bgGreen.bold(answer), chalk.bgGreen.bold("Right Woohooo:)"));
+  } else {
+    console.log(chalk.bgRed.bold(answer), chalk.bgRed.bold("Wrong:("));
+  }
+}
 
-checkHighScore(score, userName);
+// this function adjust level 
+function setLevel(levelArray) {
+  for (let i = 0; i < levelArray.length; i++) {
+    let current = levelArray[i];
+    askQuestion(current.question, current.answer, current.options);
+    console.log("Your score is: ", score);
+  }
+}
 
-for(var i = 0; i<highScore.length; i++) {
-  console.log("----------HIGH SCORE BOARD----------");
-  console.log("Name : ", highScore[i].name);
-  console.log("Score : ", highScore[i].score);
-  console.log("-----------------------------------------------------");
+// Carrier program
+const userName = readlineSync.question("Enter Your Name: ");
 
+if (score < 5) {
+  setLevel(levelOneQuestions);
+  if (score >= 5) {
+    console.log(chalk.black.bgMagenta.bold("Congratulations! You Unlock Level 2: "))
+    setLevel(levelSecondQuestions);
+    if (score >= 8) {
+      console.log(chalk.black.bgMagenta.bold("Congratulations! You Unlock Level 3: "))
+      setLevel(levelThreeQuestions);
+    }
+  }
+}
 
+CheckhighScore(userName, score);
+
+// Print HighScores
+console.log("-------- High Scores: ---------");
+for (let i = 0; i < highScorers.length; i++) {
+  console.log("Name:", highScorers[i].name, ", Score: ", highScorers[i].score);
 }
