@@ -5,11 +5,11 @@ let chalk = require('chalk');
 // high score logic
 const highScorers = [
   {
-    name: "king",
+    name: "Thor",
     score: 8
   },
   {
-    name: "princess",
+    name: "Loki",
     score: 8
   }
 ]
